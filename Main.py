@@ -1,3 +1,34 @@
+def polynomial_display(args):
+    result = ""
+    degree = int(len(args))-1
+    print(len(args))
+    if len(args) < 3:
+        raise ValueError("You did not enter a polynomial.")
+    #this is seriously hardcore spaghetti code
+    for index, i in enumerate(args):
+        if index == 0:
+                result = result + "{}x^{} ".format(i, degree)
+        elif i > 0:
+            if degree == 1:
+                result += "+ {}x ".format(i, degree)
+            elif degree != 0:
+                result = result + "+ {}x^{} ".format(i, degree)
+
+            else:
+                result = result + "+ {}".format(i)
+                break
+        else:
+            if degree == 1:
+                result += "{}x ".format(i, degree)
+            elif degree != 0:
+                result = result + "{}x^{} ".format(i, degree)
+            else:
+                result = result + "{}".format(i)
+                break
+        degree -= 1
+
+    return result
+
 def evaluate(x_value, *args):
     """
            Usage:
@@ -56,7 +87,7 @@ def roots(start_range, end_range, *coefficients):
 def digits(n):
     # returns the number of decimal points in a float.
     #TODO: this only works up to 14 decimals where str representation of long flots automatically turn into sci. notation
-    #TODO: either dive deeper into spaghetti code and turn the string of the sci. notation into a str representation AGAIN
+    #TODO: either dive deeper into spaghetti code and parse the string of the sci. notation and turn it into a str representation AGAIN
     #TODO: or find another way to display decimal points.
     strn = str(n)
     decimals = strn.split('.')[1]
@@ -64,17 +95,19 @@ def digits(n):
     return len(decimals)
 
 if __name__ == '__main__':
+    example = [5, -8 ,2 ]
+
     while True:
         try:
-            right_interval = int(input("[x1, x2]: Enter the x1 value for the interval you want to check."))
+            left_interval = int(input("[x1, x2]: Enter the x1 value for the interval you want to check."))
             break
         except ValueError:
             print("Input must be an integer.")
 
     while True:
         try:
-            left_interval = int(input("[" + str(right_interval) + ", x2]: Enter the x2 value you want to check."))
-            if left_interval < right_interval:
+            right_interval = int(input("[" + str(left_interval) + ", x2]: Enter the x2 value you want to check."))
+            if right_interval < left_interval:
                 print("Rightbound interval may not be smaller than leftbound.")
             else:
                 break
@@ -83,16 +116,16 @@ if __name__ == '__main__':
     print("[" + str(right_interval) + "," + str(left_interval) +"]")
     while True:
         try:
-            coefficients = (input("Enter the coefficients of the polynomial ranging from leading to constant.(separate with spaces)"))
+            coefficients = (input("Enter the coefficients of the polynomial ranging from leading to constant.(separate with spaces, if there's no constant, add 0)"))
             break
         except ValueError:
             print("Input must be an integer.")
 
     #split joins strings, we want int
-    coefficients = map(int, coefficients.split())
+    coefficientsx = list(map(int, coefficients.split()))
 
-    print("Checking for roots in x^2+x-40 within [0,10] up to 13 decimal points \nbecause after 13 it converts to scientific"
-          " notation which fucks up my\nfunction for checking decimal points.\n")
-    print("x = " + str(roots(right_interval, left_interval, *coefficients)))
+    print("Checking for roots in {} within [{},{}] up to 13 decimal points \nbecause after 13 it converts to scientific"
+          " notation which fucks up my\nfunction for checking decimal points.\n".format(polynomial_display(coefficientsx), left_interval, right_interval))
+    print("x = " + str(roots(left_interval, right_interval, *coefficientsx)))
 
     #digits(2.1231531)
