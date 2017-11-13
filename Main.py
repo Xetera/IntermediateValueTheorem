@@ -1,3 +1,8 @@
+# The algorithm only works if the root
+#
+#
+
+
 def polynomial_display(args):
     result = ""
     degree = int(len(args))-1
@@ -26,8 +31,8 @@ def polynomial_display(args):
                 result = result + "{}".format(i)
                 break
         degree -= 1
-
     return result
+
 
 def evaluate(x_value, *args):
     """
@@ -42,34 +47,44 @@ def evaluate(x_value, *args):
     for i, arg in enumerate(args):
         array.append(int(arg*(x_value**(degree-i))))
     answer = sum(array)
-    return(answer)
+    return answer
+
 
 def roots(start_range, end_range, *coefficients):
-    left_response = evaluate(start_range, *coefficients)
-    left_range = start_range
 
-    right_response = evaluate(end_range, *coefficients)
-    right_range = end_range
+    while True:
+        print(start_range)
+        print(end_range)
+        left_response = evaluate(start_range, *coefficients)
+        left_range = start_range
 
-    if left_response > 0:
-        left_positive = True
-    else:
-        left_positive = False
+        right_response = evaluate(end_range, *coefficients)
+        right_range = end_range
+        print("left response: {}".format(left_response))
+        print("right response: {}".format(right_response))
+        if left_response > 0:
+            left_positive = True
+        else:
+            left_positive = False
 
-    if right_response > 0:
-        right_positive = True
-    else:
-        right_positive = False
+        if right_response > 0:
+            right_positive = True
+        else:
+            right_positive = False
 
-    if (right_positive and left_positive) or (not right_positive and not left_positive):
-        print("No roots found in the interval.")
-        return
+        if (right_positive and left_positive) or (not right_positive and not left_positive):
+            if start_range > end_range:
+                return print("No roots were found within the interval.")
+            start_range += 1
+            continue
+        else:
+            break
 
     midpoint = (left_range + right_range)/2.0
     midpoint_eval = evaluate(midpoint, *coefficients)
 
     print("midpoint: " + str(midpoint))
-    if midpoint_eval < 0:
+    if midpoint_eval <= 0:
         answer = midpoint
         left_range = midpoint
         if digits(answer) < 13:
@@ -83,7 +98,6 @@ def roots(start_range, end_range, *coefficients):
     return answer
 
 
-
 def digits(n):
     # returns the number of decimal points in a float.
     #TODO: this only works up to 14 decimals where str representation of long flots automatically turn into sci. notation
@@ -91,11 +105,14 @@ def digits(n):
     #TODO: or find another way to display decimal points.
     strn = str(n)
     decimals = strn.split('.')[1]
-    #print("Number of decimals: " + str(len(decimals)))
+
     return len(decimals)
+
 
 if __name__ == '__main__':
     example = [5, -8 ,2 ]
+    print(evaluate(1, 5, -8, 2))
+    print(evaluate(10, 5, -8 ,2))
 
     while True:
         try:
@@ -113,7 +130,7 @@ if __name__ == '__main__':
                 break
         except ValueError:
             print("Input must be an integer.")
-    print("[" + str(right_interval) + "," + str(left_interval) +"]")
+    print("[" + str(left_interval) + "," + str(right_interval) +"]")
     while True:
         try:
             coefficients = (input("Enter the coefficients of the polynomial ranging from leading to constant.(separate with spaces, if there's no constant, add 0)"))
@@ -127,5 +144,3 @@ if __name__ == '__main__':
     print("Checking for roots in {} within [{},{}] up to 13 decimal points \nbecause after 13 it converts to scientific"
           " notation which fucks up my\nfunction for checking decimal points.\n".format(polynomial_display(coefficientsx), left_interval, right_interval))
     print("x = " + str(roots(left_interval, right_interval, *coefficientsx)))
-
-    #digits(2.1231531)
