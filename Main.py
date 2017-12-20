@@ -18,7 +18,6 @@ def polynomial_display(args):
                 result += "+ {}x ".format(i, degree)
             elif degree != 0:
                 result = result + "+ {}x^{} ".format(i, degree)
-
             else:
                 result = result + "+ {}".format(i)
                 break
@@ -51,7 +50,6 @@ def evaluate(x_value, *args):
 
 
 def roots(start_range, end_range, *coefficients):
-
     while True:
         print(start_range)
         print(end_range)
@@ -110,10 +108,6 @@ def digits(n):
 
 
 if __name__ == '__main__':
-    example = [5, -8 ,2 ]
-    print(evaluate(1, 5, -8, 2))
-    print(evaluate(10, 5, -8 ,2))
-
     while True:
         try:
             left_interval = int(input("[x1, x2]: Enter the x1 value for the interval you want to check."))
